@@ -12,8 +12,11 @@ struct ContentView: View{
     @State private var tasks: [Task] = []
     
     func AddNewTask() {
+        if (!TempTask.isEmpty){
         tasks.append(Task(Item: TempTask))
-        self.TempTask = ""
+        TempTask.removeAll()
+        }
+        
     }
     
     func move(from source: IndexSet, to destination: Int) {
@@ -27,7 +30,7 @@ struct ContentView: View{
     var searchBar: some View{
         HStack{
             TextField("Enter a new ToDo", text: $TempTask)
-            Button(action: AddNewTask, label: {Text("Add")} )
+            Button(action: AddNewTask , label: {Text("Add")} )
         }
     }
     
@@ -38,9 +41,11 @@ struct ContentView: View{
             VStack{
                 searchBar.padding()
                 List{
+                    
+                    
                     ForEach(tasks) {
                         task in Text(task.Item)
-                    }.onMove(perform: self.move).onDelete(perform: self.delete)
+                    }.onMove(perform: move).onDelete(perform: delete)
                     
                 }.navigationTitle("Tasks").navigationBarItems(trailing: EditButton())
             }
@@ -49,7 +54,6 @@ struct ContentView: View{
     
 
 }
-
 
 
 
